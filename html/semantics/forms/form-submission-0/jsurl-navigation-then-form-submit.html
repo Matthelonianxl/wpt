@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="author" title="Joey Arhar" href="mailto:jarhar@chromium.org">
+<link rel="help" href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm">
+
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+
+<script>
+async_test(t => {
+  window.onload = t.step_func(() => {
+    const iframe = document.createElement('iframe');
+    iframe.name = 'myframe';
+    document.body.appendChild(iframe);
+
+    iframe.onload = t.step_func_done(() => {
+      assert_equals(iframe.contentDocument.location.pathname, '/formaction.html');
+    });
+
+    const form = document.createElement('form');
+    form.target = iframe.name;
+    form.action = '/formaction.html';
+    document.body.appendChild(form);
+
+    iframe.src = 'javascript:false';
+    form.submit();
+  });
+});
+</script>
